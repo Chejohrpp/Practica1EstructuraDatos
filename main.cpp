@@ -21,6 +21,7 @@ int pasoActual = 1;
 int idClienteEntrar = 0;
 int indexColaPagos= 0;
 int cantAcciones;
+int cantPersonasInicio=0;
 
 //listas
 ListSimple pila1Carreta;
@@ -211,13 +212,31 @@ int main(){
 	printf("Cantidad de cajas: ");
 	cin>>cantCajas;
 	addCajas();
-	for(int i=0; i<30; i++){
-		addColaEspera1();
+	printf("Cantidad de personas al inicio: ");
+	cin>>cantPersonasInicio;
+	for(int i=0; i<cantPersonasInicio;i++){
+		pilaClientesEspera.add(idClienteEntrar);
+		cantAcciones++;
+		idClienteEntrar++;
+		cantClientesSistema++;
 	}
+	int choice = 0;
+	do
+	{
+		
+		printf("Cantidad clientes en cola de espera de carretas: %d\n",pilaClientesEspera.getSize());
+		printf("Cantidad  de carretas en la pila 1: %d\nCantidad de carretas en la pila 2: %d\n",pila1Carreta.getSize(),pila2Carreta.getSize());
+		printf("Cantidad de clientes comprando: %d\n",compras.getSize());
+		printf("Cantidad clientes en cola de pagos: %d\n",colaPagos.getSize());
+		printf("Cantidad de cajas: %d\n",cajas.getSize());
+		printf("presione 1 para iniciar la simulacion: ");
+		cin>>choice;
+	} while (choice!= 1);
 
 	graficar();
 	pasoActual++;
 	int eleccion = 0;
+	string terminar;
 	do
 	{
 		cantAcciones=0;
@@ -227,7 +246,12 @@ int main(){
 			int pasoRealizar = devolvernumRam(1,5);
 			if (pasoRealizar==1)
 			{
-				//addColaEspera1();
+				/*int nuevasPersona = 0;
+				printf("Cuantas personas quieres agregar al sistema? ");
+				cin>>nuevasPersona;
+				for(int i=0;i<nuevasPersona;i++){
+					addColaEspera1();
+				}*/
 			}else if(pasoRealizar==2)
 			{
 				agarrarCarreta2();
