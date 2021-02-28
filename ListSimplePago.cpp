@@ -29,8 +29,8 @@ ClienteCarreta ListSimplePago::pop(){
 	if (primero!=NULL){
 		cliente = primero->clienteCarreta;
 		if (ultimo == primero){
-			delete(primero);
-			delete(ultimo);			
+			delete(tmp);
+			primero =NULL;	
 		}else{
 			primero = primero->sig;
 			delete(tmp);

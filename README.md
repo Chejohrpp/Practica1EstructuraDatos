@@ -1,3 +1,6 @@
+Se necesita tener instalado Graphviz
+
+
 Compilar:
 
  g++ -Wall main.cpp ListSimple.cpp ListCircular.cpp CajaRegistradora.cpp ListDoble.cpp ListSimplePago.cpp -o salida

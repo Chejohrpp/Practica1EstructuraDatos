@@ -1,10 +1,7 @@
 digraph G{subgraph cluster_cajas {label = "Cajas";	style=filled;style=filled;color=white;node [style=rounded,color=black,shape=box];f1->f2[constraint=false];f1[label="Caja 1 
- Turno: 0 
+ Turno: 29 
  Libre "];f2->f3[constraint=false];f2->f1[constraint=false];f2[label="Caja 2 
- Turno: 5 
- Ocupado "];f3->f2[constraint=false];f3[label="Caja 3 
- Turno: 6 
- Ocupado "];}subgraph cluster_pagar{label = "Cola de espera a pagar";style=filled;style=filled;color=white;node [shape=box,color=black,style=rounded];e22->e26;e22[label="cliente 22 "];e26->e30;e26[label="cliente 26 "];e30[label="cliente 30 "];}subgraph cluster_compras{label = " compras ";style=filled;style=filled;color=white;node [style=rounded,color=black,shape=box];d1->d2[constraint=false];d1[label="Cliente 50 
- Carreta 16"];d2->d3[constraint=false];d2[label="Cliente 56 
- Carreta 96"];d3->d1[constraint=false];d3[label="Cliente 57 
- Carreta 89"];}subgraph cluster_carretas{label ="Carretas";style=filled;color=white;subgraph cluster_b{label = " Pila 1 ";style=filled;style=filled;color=white;node [shape=box,color=black];b3[label=" 3 "];}subgraph cluster_c{label = " Pila 2 ";style=filled;style=filled;color=white;node [shape=box,color=black];c5->c8;c5[label=" 5 "];c8[label=" 8 "];}}subgraph cluster_a{label = " Cola de espera ";style=filled;style=filled;color=white;node [shape=box,color=black];a9[label="cliente 9 "];} }
+ Turno: 1 
+ Libre "];f3->f2[constraint=false];f3[label="Caja 3 
+ Turno: 0 
+ Libre "];}subgraph cluster_pagar{label = "Cola de espera a pagar";style=filled;style=filled;color=white;node [shape=box,color=black,style=rounded];}subgraph cluster_compras{label = " compras ";style=filled;style=filled;color=white;node [style=rounded,color=black,shape=box];}subgraph cluster_carretas{label ="Carretas";style=filled;color=white;subgraph cluster_b{label = " Pila 1 ";style=filled;style=filled;color=white;node [shape=box,color=black];b8->b10;b8[label=" 8 "];b10->b3;b10[label=" 10 "];b3->b4;b3[label=" 3 "];b4->b1;b4[label=" 4 "];b1[label=" 1 "];}subgraph cluster_c{label = " Pila 2 ";style=filled;style=filled;color=white;node [shape=box,color=black];c5->c2;c5[label=" 5 "];c2->c7;c2[label=" 2 "];c7->c9;c7[label=" 7 "];c9->c6;c9[label=" 9 "];c6[label=" 6 "];}}subgraph cluster_a{label = " Cola de espera ";style=filled;style=filled;color=white;node [shape=box,color=black];} }

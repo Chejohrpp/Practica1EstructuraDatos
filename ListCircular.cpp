@@ -52,6 +52,9 @@ ClienteCarreta ListCircular:: pop(int id){
 				}
 				delete (tmp);
 				size--;
+				if (size <= 0){
+					primero = NULL;
+				}
 				return clienteCarret;
 			}
 			tmpAnt = tmp;

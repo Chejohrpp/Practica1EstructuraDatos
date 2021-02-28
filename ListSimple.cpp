@@ -6,72 +6,38 @@
 ListSimple::ListSimple(){
 
 }
-void ListSimple::add1(int id){
-	primero = new(Container);
-	primero->id = id;
-	primero->sig=NULL;
-	size++;
 
-}
 void ListSimple::add(int id){
-	if (size ==0)
+	Container *nuevo = new (Container);
+	nuevo->id = id;
+	if (primero==NULL)
 	{
-		add1(id);
-	}else
-	{
-		Container *newContainer;
-		newContainer = primero;
-		if (primero->sig==NULL){
-			newContainer = new(Container);
-			newContainer->id = id;
-			newContainer->sig=NULL;
-			primero->sig = newContainer;
-			size++;
-		}else{
-			newContainer = newContainer->sig;
-			int cycle = 0;
-			while(cycle==0){
-				if (newContainer->sig == NULL)
-				{
-					Container *tmp = newContainer;
-					newContainer = new(Container);
-					newContainer -> id = id;
-					newContainer->sig = NULL;
-					tmp->sig = newContainer;			
-					size++;
-					break;
-				}else{
-					newContainer = newContainer->sig;
-				}
-
-			}
-		}
-
+		primero = nuevo;
+		primero->sig =NULL;
+		ultimo = primero;
+		size++;
+	}else{
+		ultimo->sig =nuevo;
+		nuevo->sig = NULL;
+		ultimo = nuevo;
+		size++;
 	}
 }
 int ListSimple::pop(){
+	Container *tmp = new (Container);
 	int id;
-	if(size!=0){
-		Container *tmp = primero;
-		Container *tmpsig = primero->sig;
-		if(size==1){
-			id = primero->id;
-			delete (primero);
-			size--;
-			return id;
+	tmp = primero;
+	if (primero!=NULL){
+		id = primero->id;
+		if (ultimo == primero){
+			delete(tmp);
+			primero = NULL;	
+		}else{
+			primero = primero->sig;
+			delete(tmp);
 		}
-		for(int i=0; i<size; i++){
-			if(i == size-2){
-				id = tmpsig->id;
-				tmp->sig =NULL;
-				delete (tmpsig);
-				size--;
-				return id;
-			}else{				
-				tmp = tmp->sig;
-				tmpsig = tmpsig->sig;
-			}
-		}
+		size--;
+		return id;
 	}
 	return -1;
 }
@@ -79,7 +45,7 @@ string ListSimple::mostrarLista(string letra,string nombre){
 	Container *tmp = new(Container);
 	tmp = primero;
 	string pilas = cabecera(letra,nombre);
-	if (primero!=NULL){
+	if (primero != NULL){
 		do
 		{
 			string actual = letra+to_string(tmp->id);

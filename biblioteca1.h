@@ -17,7 +17,7 @@ private:
 
 	}Container;
 	Container *primero;
-	void add1(int id);
+	Container* ultimo;
 	int size = 0;
 public:
 	ListSimple();
@@ -57,9 +57,9 @@ private:
 public:		
 	int tiempo;
 	bool estado;
-	ClienteCarreta* clienteCarreta;
+	ClienteCarreta clienteCarreta;
 	CajaRegistradora();
-	CajaRegistradora(int numCaja1, int tiempo1, bool estado1, ClienteCarreta* clienteCarreta1);
+	CajaRegistradora(int numCaja1, int tiempo1, bool estado1, ClienteCarreta clienteCarreta1);
 	int getNumCaja();
 };
 
