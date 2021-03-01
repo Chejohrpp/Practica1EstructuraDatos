@@ -10,15 +10,12 @@ using namespace std;
 int cantCarretas;
 int cantCajas;
 
-int cantClientesEspera;
-int cantClientesPagando;
-int cantCarretasPila1;
-int cantCarretasPila2;
-int cantClientesComprando;
+int cantClientesPagando=0;
+int cantClientesComprando=0;
 
 int cantClientesSistema;
 int pasoActual = 1;
-int idClienteEntrar = 0;
+int idClienteEntrar = 1;
 int indexColaPagos= 0;
 int cantAcciones;
 int cantPersonasInicio=0;
@@ -40,17 +37,6 @@ int devolvernumRam(int inferior, int superior){
 
 int llenarCarretas(){
 	int numRandom;
-	//srand(time(NULL));//tiene que ir se quiere usar devolverRam()
-	//pila 1
-	/*for(int i=0; i<cantCarretasPila1; i++){
-		//numRandom = devolvernumRam(1,2);
-		pila1Carreta.add(i+1);
-
-	}
-	//pila 2
-	for(int i=0; i<cantCarretasPila2;i++){
-		pila2Carreta.add(cantCarretasPila1 + i+1);
-	}*/
 	for(int i=1; i<=cantCarretas;i++){
 		numRandom = devolvernumRam(1,2);
 		if (numRandom==1)
@@ -133,6 +119,7 @@ int pasarPagar4(int paso, int idCliente){
 	}
 	if (paso==3){
 		printf("El cliente %d entra a la cola de pagos\n", idCliente);
+		indexColaPagos++;
 		cantAcciones++;
 	}
 
@@ -150,6 +137,7 @@ int irColaPago3(){
 			colaPagos.add(indexColaPagos,clienteCarreta);
 			printf("El cliente %d entra a la cola de pagos\n", clienteCarreta.idCliente);
 			cantAcciones++;
+			indexColaPagos++;
 		}else{
 			colaPagos.add(indexColaPagos,clienteCarreta);
 			pasarPagar4(3, clienteCarreta.idCliente);
@@ -159,10 +147,11 @@ int irColaPago3(){
 	return 0;
 }
 int salidaSistema5(){
-	for(int i=1;i<=cantCajas;i++){
-		if (cajas.libreCaja(i)==false)
+	int cajaRevisar = devolvernumRam(1,cantCajas);
+	//for(int i=1;i<=cantCajas;i++){
+		if (cajas.libreCaja(cajaRevisar)==false)
 		{
-			CajaRegistradora caja = cajas.getCajaRegistradora(i);
+			CajaRegistradora caja = cajas.getCajaRegistradora(cajaRevisar);
 			ClienteCarreta clienteCarreta;
 			clienteCarreta = caja.clienteCarreta;
 			int devolverCarreta = devolvernumRam(1,2);
@@ -180,10 +169,20 @@ int salidaSistema5(){
 			cantAcciones++;
 			return 0;
 		}
-	}
+	//}
 	return 0;
 }
-
+int buscarCarreta(){
+	int idCarreta=0;
+	if(pila1Carreta.getSize() > 0){
+		idCarreta = pila1Carreta.pop();
+		return idCarreta;
+	}else{
+		idCarreta = pila2Carreta.pop();
+		return idCarreta;
+	}
+	return idCarreta;
+}
 
 void crearArchivo(){
 	ofstream file;
@@ -215,19 +214,58 @@ int main(){
 	printf("Cantidad de cajas: ");
 	cin>>cantCajas;
 	addCajas();
-	printf("Cantidad de personas al inicio: ");
+
+	printf("Cantidad de personas en cola de espera: ");
 	cin>>cantPersonasInicio;
+
+	while(cantCarretas > 0){
+		printf("Cantidad de clientes comprando:");
+		cin>>cantClientesComprando;
+		if (cantClientesComprando > cantCarretas)
+		{
+			printf("la cantidad especificada supera la cantidad de carretas en el sistema\n");
+		}else{
+			break;
+		}	
+	}
+	while((cantCarretas-cantClientesComprando) > 0){
+		printf("Cantidad  de clienes pagando:");
+		cin>>cantClientesPagando;
+		if (cantClientesPagando > (cantCarretas-cantClientesComprando) ){
+			printf("La cantidad de clientes pagando supera las carretas disponibles, Max para agregar: %d\n",cantCarretas-cantClientesComprando);
+		}else{
+			break;
+		}
+	}
+
+	for(int i=0;i<cantClientesPagando;i++){
+		ClienteCarreta clienteCarreta;
+		clienteCarreta.idCliente = idClienteEntrar;
+		clienteCarreta.idCarreta = buscarCarreta();
+			colaPagos.add(indexColaPagos,clienteCarreta);
+			indexColaPagos++;
+			idClienteEntrar++;
+			cantClientesSistema++;
+	}
+
+	for(int i=0;i<cantClientesComprando;i++){
+		compras.add(buscarIdNewCompras(),idClienteEntrar,buscarCarreta());
+		idClienteEntrar++;
+		cantClientesSistema++;
+	}
+
 	for(int i=0; i<cantPersonasInicio;i++){
 		pilaClientesEspera.add(idClienteEntrar);
 		cantAcciones++;
 		idClienteEntrar++;
 		cantClientesSistema++;
 	}
+
 	int choice = 0;
 	do
 	{
 		
-		printf("Cantidad clientes en cola de espera de carretas: %d\n",pilaClientesEspera.getSize());
+		printf("\nCantidad clientes en cola de espera de carretas: %d\n",pilaClientesEspera.getSize());
 		printf("Cantidad  de carretas en la pila 1: %d\nCantidad de carretas en la pila 2: %d\n",pila1Carreta.getSize(),pila2Carreta.getSize());
 		printf("Cantidad de clientes comprando: %d\n",compras.getSize());
 		printf("Cantidad clientes en cola de pagos: %d\n",colaPagos.getSize());
@@ -238,46 +276,26 @@ int main(){
 
 	graficar();
 	pasoActual++;
-	//int eleccion = 0;
-	//string terminar;
 	do
 	{
 		cantAcciones=0;
 		printf("\n ************* Paso %d ************* \n",pasoActual);
-		/*eleccion = devolvernumRam(1,6);
-		for(int i=0; i<eleccion;i++){
-			int pasoRealizar = devolvernumRam(1,5);
-			if (pasoRealizar==1)
-			{
-				int nuevasPersona = 0;
-				printf("Cuantas personas quieres agregar al sistema? ");
-				cin>>nuevasPersona;
-				for(int i=0;i<nuevasPersona;i++){
-					addColaEspera1();
-				}
-			}else if(pasoRealizar==2)
-			{
-				agarrarCarreta2();
-			}else if(pasoRealizar==3)
-			{
-				irColaPago3();
-			}else if(pasoRealizar==4)
-			{
-				pasarPagar4(0,0);
-			}else if(pasoRealizar==5)
-			{
-				salidaSistema5();
-			}
-		} */
 		int agregaCliente = devolvernumRam(0,10);
+		//agregamos un nuevo cliente al sistema
 		if(agregaCliente==1){
 			addColaEspera1();
 		}
+		//si hay carretas disponibles y personas en espera se agrega a las compras
 		agarrarCarreta2();
+		//pasamos a buscar a alguien de compras y los pasamos a la cola de pagos
 		for(int i=0;i<10;i++){
 			irColaPago3();
 		}
-		pasarPagar4(0,0);
+		//vemos si se puede ir a pagar en alguna caja
+		for(int i=0;i<cantCajas;i++){
+			pasarPagar4(0,0);
+		}
+		//un cliente sale del sistema
 		salidaSistema5();
 		if (cantAcciones>0)
 		{
