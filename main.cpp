@@ -148,7 +148,6 @@ int irColaPago3(){
 }
 int salidaSistema5(){
 	int cajaRevisar = devolvernumRam(1,cantCajas);
-	//for(int i=1;i<=cantCajas;i++){
 		if (cajas.libreCaja(cajaRevisar)==false)
 		{
 			CajaRegistradora caja = cajas.getCajaRegistradora(cajaRevisar);
@@ -169,7 +168,6 @@ int salidaSistema5(){
 			cantAcciones++;
 			return 0;
 		}
-	//}
 	return 0;
 }
 int buscarCarreta(){
