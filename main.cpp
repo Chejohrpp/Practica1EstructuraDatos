@@ -87,28 +87,31 @@ int buscarIdNewCompras(){
 	return (compras.getSize()+1);
 }
 int agarrarCarreta2(){
-	if (compras.getSize() >= 100)
-	{
-		return 0;
-	}
-	if (pilaClientesEspera.getSize() > 0){
-		if (pila1Carreta.getSize() > 0)
+	while(pilaClientesEspera.getSize() > 0 && (pila1Carreta.getSize()>0 || pila2Carreta.getSize()>0) ){
+		if (compras.getSize() >= 100)
 		{
-			int idClienteComprar = pilaClientesEspera.pop();
-			int idCarretaComprar = pila1Carreta.pop();
-			compras.add(buscarIdNewCompras(),idClienteComprar,idCarretaComprar);
-			printf("El cliente %d entro a comprar con la carreta %d de la pila 1\n",idClienteComprar,idCarretaComprar);
-			cantAcciones++;
+			return 0;
 		}
-		else if(pila2Carreta.getSize() >0)
-		{
-			int idClienteComprar = pilaClientesEspera.pop();
-			int idCarretaComprar =  pila2Carreta.pop();
-			compras.add(buscarIdNewCompras(),idClienteComprar,idCarretaComprar);
-			printf("El cliente %d entro a comprar con la carreta %d de la pila 2\n",idClienteComprar,idCarretaComprar);
-			cantAcciones++;
+		if (pilaClientesEspera.getSize() > 0){
+			if (pila1Carreta.getSize() > 0)
+			{
+				int idClienteComprar = pilaClientesEspera.pop();
+				int idCarretaComprar = pila1Carreta.pop();
+				compras.add(buscarIdNewCompras(),idClienteComprar,idCarretaComprar);
+				printf("El cliente %d entro a comprar con la carreta %d de la pila 1\n",idClienteComprar,idCarretaComprar);
+				cantAcciones++;
+			}
+			else if(pila2Carreta.getSize() >0)
+			{
+				int idClienteComprar = pilaClientesEspera.pop();
+				int idCarretaComprar =  pila2Carreta.pop();
+				compras.add(buscarIdNewCompras(),idClienteComprar,idCarretaComprar);
+				printf("El cliente %d entro a comprar con la carreta %d de la pila 2\n",idClienteComprar,idCarretaComprar);
+				cantAcciones++;
+			}
 		}
 	}
+
 	return 0;
 }
 int pasarPagar4(int paso, int idCliente){
@@ -235,23 +238,23 @@ int main(){
 
 	graficar();
 	pasoActual++;
-	int eleccion = 0;
-	string terminar;
+	//int eleccion = 0;
+	//string terminar;
 	do
 	{
 		cantAcciones=0;
 		printf("\n ************* Paso %d ************* \n",pasoActual);
-		eleccion = devolvernumRam(1,6);
+		/*eleccion = devolvernumRam(1,6);
 		for(int i=0; i<eleccion;i++){
 			int pasoRealizar = devolvernumRam(1,5);
 			if (pasoRealizar==1)
 			{
-				/*int nuevasPersona = 0;
+				int nuevasPersona = 0;
 				printf("Cuantas personas quieres agregar al sistema? ");
 				cin>>nuevasPersona;
 				for(int i=0;i<nuevasPersona;i++){
 					addColaEspera1();
-				}*/
+				}
 			}else if(pasoRealizar==2)
 			{
 				agarrarCarreta2();
@@ -265,7 +268,17 @@ int main(){
 			{
 				salidaSistema5();
 			}
+		} */
+		int agregaCliente = devolvernumRam(0,10);
+		if(agregaCliente==1){
+			addColaEspera1();
 		}
+		agarrarCarreta2();
+		for(int i=0;i<10;i++){
+			irColaPago3();
+		}
+		pasarPagar4(0,0);
+		salidaSistema5();
 		if (cantAcciones>0)
 		{
 			graficar();
