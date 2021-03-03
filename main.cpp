@@ -9,6 +9,8 @@ using namespace std;
 
 int cantCarretas;
 int cantCajas;
+int cantCarretasPila1=0;
+int cantCarretasPila2=0;
 
 int cantClientesPagando=0;
 int cantClientesComprando=0;
@@ -36,16 +38,16 @@ int devolvernumRam(int inferior, int superior){
 }
 
 int llenarCarretas(){
-	int numRandom;
-	for(int i=1; i<=cantCarretas;i++){
-		numRandom = devolvernumRam(1,2);
-		if (numRandom==1)
-		{
-			pila1Carreta.add(i);
-		}else{
-			pila2Carreta.add(i);
-		}
+	int finalPila1 = cantCarretasPila1+cantClientesComprando+cantClientesPagando;
+
+	for(int i=1;i<=(finalPila1);i++){
+		pila1Carreta.add(i);
 	}
+
+	for(int i=1;i<=cantCarretasPila2;i++){
+		pila2Carreta.add(i+finalPila1);
+	}
+
 	return 0;
 }
 void addCajas(){
@@ -206,35 +208,23 @@ void graficar(){
 int main(){
 	srand(time(NULL));//tiene que ir se quiere usar devolverRam()
 	
-	printf("Simulacion de MiniMarket Manager\nCantidad de carretas en total: ");
-	cin >> cantCarretas;
-	llenarCarretas();
+	printf("Simulacion de MiniMarket Manager\nCantidad de carretas al inicio en la pila 1: ");
+	cin >> cantCarretasPila1;
+	printf("Cantidad de carretas al inicio en la pila 2: ");
+	cin>>cantCarretasPila2;
 	printf("Cantidad de cajas: ");
 	cin>>cantCajas;
 	addCajas();
-
 	printf("Cantidad de personas en cola de espera: ");
 	cin>>cantPersonasInicio;
 
-	while(cantCarretas > 0){
-		printf("Cantidad de clientes comprando:");
-		cin>>cantClientesComprando;
-		if (cantClientesComprando > cantCarretas)
-		{
-			printf("la cantidad especificada supera la cantidad de carretas en el sistema\n");
-		}else{
-			break;
-		}	
-	}
-	while((cantCarretas-cantClientesComprando) > 0){
-		printf("Cantidad  de clienes pagando:");
-		cin>>cantClientesPagando;
-		if (cantClientesPagando > (cantCarretas-cantClientesComprando) ){
-			printf("La cantidad de clientes pagando supera las carretas disponibles, Max para agregar: %d\n",cantCarretas-cantClientesComprando);
-		}else{
-			break;
-		}
-	}
+	printf("Cantidad de clientes comprando con carreta incluida:");
+	cin>>cantClientesComprando;
+
+	printf("Cantidad  de clienes pagando con carreta incluida:");
+	cin>>cantClientesPagando;
+
+	llenarCarretas();
 
 	for(int i=0;i<cantClientesPagando;i++){
 		ClienteCarreta clienteCarreta;
@@ -295,9 +285,15 @@ int main(){
 		}
 		//un cliente sale del sistema
 		salidaSistema5();
+		//ver si quieren graficar
 		if (cantAcciones>0)
 		{
-			graficar();
+			string sN;
+			printf("Desea graficar los pasos? persione la letra s para si\n");
+			cin >> sN;
+			if (sN=="s"){
+				graficar();
+			}
 		}
 		pasoActual++;
 	} while (cantClientesSistema > 0);
